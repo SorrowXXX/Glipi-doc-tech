@@ -41,7 +41,7 @@ sudo chmod -R 755 /var/www/html/glpi
 sudo systemctl restart apache2
 ```
 
-## 🖥️ Installation de FusionInventory côté client
+## 🖥️ Installation de FusionInventory côté client Windows
 
 Téléchargez et installez FusionInventory. FusionInventory est un plugin pour GLPI qui permet de réaliser des inventaires de parc informatique.
 
@@ -64,6 +64,28 @@ wget https://github.com/fusioninventory/fusioninventory-agent/releases/download/
 12. Suivre les étapes jusqu'à l'installation
 13. Attendre quelques minutes avant que l'agent remonte dans GLPI
 ```
+
+## 🖥️ Installation de FusionInventory côté client linux
+
+Téléchargez et installez FusionInventory. FusionInventory est un plugin pour GLPI qui permet de réaliser des inventaires de parc informatique.
+
+```bash
+# Téléchargement
+wget https://github.com/fusioninventory/fusioninventory-agent/releases/download/2.6/fusioninventory-agent_windows-x64_2.6-portable.exe](https://github.com/fusioninventory/fusioninventory-agent/releases/download/2.6/fusioninventory-agent_2.6-1_all.deb)
+
+# Instructions d'installation
+1. sudo dpkg -i fusioninventory-agent_2.6-1_all.deb
+ou s'il y'a des erreurs
+sudo apt-get -f install
+
+2. fusioninventory-agent --version
+3. sudo systemctl start fusioninventory-agent
+4. sudo systemctl enable fusioninventory-agent
+5. sudo fusioninventory-agent --server [URL_DU_SERVEUR]/glpi/plugins/fusioninventory
+6. sudo systemctl status fusioninventory-agent
+7. Attendre quelques minutes avant que l'agent remonte dans GLPI
+```
+
 ## 📊 Surveillance de l'utilisation du CPU
 
 Le script Bash suivant est utilisé pour surveiller l'utilisation du CPU sur un serveur. Il récupère l'utilisation actuelle du CPU, et si elle dépasse 90%, il crée une alerte dans le système de gestion de tickets GLPI.
@@ -80,7 +102,7 @@ session_token="${session_token//\"/}"
 curl -X POST -H 'Content-Type: application/json' -H "Session-Token: $session_token" http://10.255.0.17/glpi/apirest.php/Ticket -d '{"input": {"name": "Alerte CPU","content": "La CPU est à 90% sur le serveur"}}'
 ```
 
-La dernière ligne `* * * * * /home/admglpi/script.sh` est une tâche cron qui exécute ce script toutes les minutes. Cela permet de surveiller l'utilisation du CPU en continu et de créer une alerte dès que l'utilisation dépasse 90%.
+`* * * * * /home/admglpi/script.sh` est une tâche cron qui exécute ce script toutes les minutes. Cela permet de surveiller l'utilisation du CPU en continu et de créer une alerte dès que l'utilisation dépasse 90%.
 
 Ce script est utile pour surveiller les ressources du serveur et réagir rapidement en cas de surcharge du CPU, ce qui pourrait affecter les performances du serveur.
 
