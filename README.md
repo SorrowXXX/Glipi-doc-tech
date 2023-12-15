@@ -64,6 +64,25 @@ wget https://github.com/fusioninventory/fusioninventory-agent/releases/download/
 12. Suivre les étapes jusqu'à l'installation
 13. Attendre quelques minutes avant que l'agent remonte dans GLPI
 ```
+## 📊 Surveillance de l'utilisation du CPU
+
+Le script Bash suivant est utilisé pour surveiller l'utilisation du CPU sur un serveur. Il récupère l'utilisation actuelle du CPU, et si elle dépasse 90%, il crée une alerte dans le système de gestion de tickets GLPI.
+
+```
+#!/bin/bash
+cpu_usage=$(top -bn 1 | grep "Cpu(s)" | awk '{print $2 + $4}')
+cpu_usage_int=${cpu_usage%%,}
+if [ "$cpu_usage_int" -ge 90 ]; then
+session_token_json=$(curl -s -H 'Content-Type: application/json' http://10.255.0.17/glpi/apirest.php/initSession -H "Authorization: Basic Z2xwaTpnbHBp")
+session_token=$(echo $session_token_json | jq '.session_token')
+echo $session_token
+session_token="${session_token//\"/}"
+curl -X POST -H 'Content-Type: application/json' -H "Session-Token: $session_token" http://10.255.0.17/glpi/apirest.php/Ticket -d '{"input": {"name": "Alerte CPU","content": "La CPU est à 90% sur le serveur"}}'
+```
+
+La dernière ligne `* * * * * /home/admglpi/script.sh` est une tâche cron qui exécute ce script toutes les minutes. Cela permet de surveiller l'utilisation du CPU en continu et de créer une alerte dès que l'utilisation dépasse 90%.
+
+Ce script est utile pour surveiller les ressources du serveur et réagir rapidement en cas de surcharge du CPU, ce qui pourrait affecter les performances du serveur.
 
 ## ✅ Conclusion
 
