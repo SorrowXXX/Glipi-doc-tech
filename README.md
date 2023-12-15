@@ -69,6 +69,13 @@ wget https://github.com/fusioninventory/fusioninventory-agent/releases/download/
 
 Téléchargez et installez FusionInventory. FusionInventory est un plugin pour GLPI qui permet de réaliser des inventaires de parc informatique.
 
+
+```bash
+# Prérequis
+sudo apt update
+sudo apt upgrade
+```
+
 ```bash
 # Téléchargement
 wget https://github.com/fusioninventory/fusioninventory-agent/releases/download/2.6/fusioninventory-agent_windows-x64_2.6-portable.exe](https://github.com/fusioninventory/fusioninventory-agent/releases/download/2.6/fusioninventory-agent_2.6-1_all.deb)
